@@ -1,0 +1,2 @@
+    zn "%SYS"
+    Do ##class(Security.Users).UnExpireUserPasswords("*")
