@@ -85,9 +85,10 @@ def add_to_database(df:pd.DataFrame):
                         VALUES (?, ?, ?, ?, ?, ?)"""
 
             # CREATE A LIST OF ROWS OF THE DATAFRAME 
+            insert_values = new_products_df.values.tolist()
 
             # EXECUTE THE QUERY WITH THE LIST OF ROWS AS A PARAMETER   
-
+            # Add solution here:
         
         st.toast("Added data to database!")
 
