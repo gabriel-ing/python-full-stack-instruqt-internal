@@ -130,7 +130,7 @@ def get_stock() -> pd.DataFrame:
 # --------------------------- Main Page Creation -----------------------------------
 
 # Show login form if unauthenticated
-if False:
+if not st.session_state.authenticated:
 # if not st.session_state.authenticated:
     login_form()
 
