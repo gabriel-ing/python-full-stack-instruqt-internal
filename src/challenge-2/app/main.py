@@ -1,7 +1,5 @@
 import streamlit as st
 
-
-
 def main():
     """
     Function to generate navigation for the homepage.
@@ -12,8 +10,6 @@ def main():
                             st.Page("pages/stock_management.py", title="Manage databases"),
 
                             ]    
-
-
 
     pg = st.navigation(pages, position="hidden")
     pg.run()

@@ -4,9 +4,9 @@ from sqlalchemy import create_engine, text
 import iris
 import io
 
-# Define admin credentials 
-# !! WARNING !! 
-# Never hardcode credentials in production environments. 
+# Define admin credentials
+# !! WARNING !!
+# Never hardcode credentials in production environments.
 DUMMY_USERNAME = "admin"
 DUMMY_PASSWORD = "1234"
 
@@ -16,9 +16,9 @@ if "authenticated" not in st.session_state:
 if "uploader_key" not in st.session_state:
     st.session_state.uploader_key = 0
 
-
 # *********************************************************************************
 # ****************************** FUNCTION DEFINITIONS ******************************
+
 
 ## Creates log-in form to authenticate the user as an administrator
 def login_form():
@@ -33,12 +33,10 @@ def login_form():
         else:
             st.error("Invalid username or password")
 
-
-
 def get_stock() -> pd.DataFrame:
-    '''
+    """
     Retrieve the stock table in the dataframe
-    '''
+    """
 
     # Define connection parameters and credentials
     server = "iris"
@@ -51,28 +49,23 @@ def get_stock() -> pd.DataFrame:
 
     # Create a connection string with the credentials
     db_url = f"iris://{username}:{password}@{server}:{port}/{namespace}"
-    
 
     # Create SQLAlchemy Engine
     engine = create_engine(db_url)
 
-
     # SQL selection query to return all the stock
     ## !!!!CORRECT THIS LINE!!!
     # Write a SQL query to retrieve all values from the coffeeco.Inventory table
-    sql =  ""
+    sql = ""
 
-    # Query DB with SQLAlchemy engine and Pandas to return a DataFrame 
+    # Query DB with SQLAlchemy engine and Pandas to return a DataFrame
     df = pd.read_sql(sql, engine)
 
     # Return the dataframe
     return df
 
+
 # **********************************************************************************
-
-
-
-
 
 # --------------------------- Main Page Creation -----------------------------------
 
@@ -96,4 +89,3 @@ else:
 
     # Displays current stock data
     st.dataframe(df)
-

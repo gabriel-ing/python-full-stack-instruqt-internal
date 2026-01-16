@@ -43,7 +43,6 @@ with st.container(border=True):
             use_container_width=True,
         )
 
-
 st.divider()
 st.markdown("### Our Branches")
 st.caption("Visit us across Snake Island")

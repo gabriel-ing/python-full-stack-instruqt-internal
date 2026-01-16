@@ -1,12 +1,12 @@
 import streamlit as st
 import pandas as pd
-import time 
+import time
 import iris
 
 st.title("Checkout")
 
 
-def update_database(id:int):
+def update_database(id: int):
     # Open Product Object by ID
     item = irispy.classMethodObject("coffeeco.Inventory", "%OpenId", id)
 
@@ -14,36 +14,31 @@ def update_database(id:int):
     if st.session_state.basket[id]["Quantity"] == item.get("StockQuantity"):
         pass
 
-            
-    else: # The item is not sold out
-        pass        
-
-
+    else:  # The item is not sold out
+        pass
 
 
 # Create page saying basket is empty
-if "basket" not in st.session_state or st.session_state.basket=={}:
+if "basket" not in st.session_state or st.session_state.basket == {}:
     st.subheader("Basket currently empty...")
     st.page_link("pages/products.py", label="Continue Shopping")
-
 
 # If basket is not empty, create checkout page
 else:
     print(st.session_state.basket)
-    
+
     # Create a Pandas Dataframe from the basket dictionary
     basket = (
-        pd.DataFrame.from_dict(st.session_state.basket, orient='index')
+        pd.DataFrame.from_dict(st.session_state.basket, orient="index")
         .reset_index()
-        .rename(columns={'index': 'id'})
-        [['id', 'Name', 'Price', 'Quantity']]
+        .rename(columns={"index": "id"})[["id", "Name", "Price", "Quantity"]]
     )
-    
+
     # Set number display to two decimal places
     pd.set_option("display.precision", 2)
 
-    # Create subtotal column 
-    basket["Subtotal"] = basket["Price"]*basket["Quantity"]
+    # Create subtotal column
+    basket["Subtotal"] = basket["Price"] * basket["Quantity"]
 
     # Calculate totals
     total_quantity = basket["Quantity"].sum()
@@ -61,21 +56,25 @@ else:
     st.header("Total")
 
     # Create table of subtotals and totals
-    total_row = pd.DataFrame([[ f"{total_quantity} items", f"$ {(total-0.2*total).round(2)}", f"$ {(0.2*total).round(2)}",  f"$ {total.round(2)}"]],
-                            columns=["Quantity", "Subtotal", "Tax","Total"])
+    total_row = pd.DataFrame(
+        [
+            [
+                f"{total_quantity} items",
+                f"$ {(total-0.2*total).round(2)}",
+                f"$ {(0.2*total).round(2)}",
+                f"$ {total.round(2)}",
+            ]
+        ],
+        columns=["Quantity", "Subtotal", "Tax", "Total"],
+    )
 
     # Style the table
-    styled_total = total_row.style.set_properties(**{
-        "font-weight": "bold",
-        "text-align": "right"
-    }).set_table_styles([
-        {"selector": "th", "props": [("text-align", "right")]}
-    ])
+    styled_total = total_row.style.set_properties(
+        **{"font-weight": "bold", "text-align": "right"}
+    ).set_table_styles([{"selector": "th", "props": [("text-align", "right")]}])
 
-    # Show table with the total 
+    # Show table with the total
     st.table(styled_total)
-
-    
 
     # Create the button with an on-click function
     if st.button("Pay Now!"):
@@ -91,6 +90,6 @@ else:
 
             # # Reset basket
             # st.session_state.basket = {}
-            
+
             # # Redirect user to confirmation page
             # st.switch_page( "pages/hidden/thanks.py")

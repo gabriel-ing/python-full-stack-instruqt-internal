@@ -4,9 +4,9 @@ from sqlalchemy import create_engine, text
 import iris
 import io
 
-# Define admin credentials 
-# !! WARNING !! 
-# Never hardcode credentials in production environments. 
+# Define admin credentials
+# !! WARNING !!
+# Never hardcode credentials in production environments.
 DUMMY_USERNAME = "admin"
 DUMMY_PASSWORD = "1234"
 
@@ -15,7 +15,6 @@ if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
 if "uploader_key" not in st.session_state:
     st.session_state.uploader_key = 0
-
 
 # *********************************************************************************
 # ****************************** FUNCTION DEFINITIONS ******************************
@@ -34,29 +33,38 @@ def login_form():
             st.error("Invalid username or password")
 
 
-def add_to_database(df:pd.DataFrame):
-    '''
+def add_to_database(df: pd.DataFrame):
+    """
     Adds a dataframe to the database
 
-    Workflow: 
+    Workflow:
         - Check that the schema matches the expected schema of the data table.
-        - Queries the database to collect all of the existing product ids. 
-        - splits the order dataframe by whether it is new or already in the database (requires inserting or updating) 
+        - Queries the database to collect all of the existing product ids.
+        - splits the order dataframe by whether it is new or already in the database (requires inserting or updating)
         - Updates the existing product stocks in the database
         - Inserts the new products into the database
-    '''
+    """
 
     # Checks if the dataframe has the correct schema
-    if set(df.columns) != {"ProductId", "Name", "Description", "CountryOfOrigin", "Price", "StockQuantity"}:
+    if set(df.columns) != {
+        "ProductId",
+        "Name",
+        "Description",
+        "CountryOfOrigin",
+        "Price",
+        "StockQuantity",
+    }:
         print(df.columns)
-        st.error("The dataframe provided does not match the database table schema", icon="🚨")
+        st.error(
+            "The dataframe provided does not match the database table schema", icon="🚨"
+        )
         st.warning("Data Not added")
         return -1
-    
+
     with iris.connect("iris", 1972, "USER", "SuperUser", "SYS") as conn:
         cursor = conn.cursor()
 
-        # Get list of current product ids in the database 
+        # Get list of current product ids in the database
         cursor.execute("SELECT ProductId FROM coffeeco.Inventory")
         current_ids = [x[0] for x in cursor.fetchall()]
         print(current_ids)
@@ -73,31 +81,32 @@ def add_to_database(df:pd.DataFrame):
                     WHERE ProductId = ?
                     """
             # Convert the dataframe to a list of lists
-            update_values = existing_products_df[["StockQuantity", "ProductId"]].values.tolist()
-            
+            update_values = existing_products_df[
+                ["StockQuantity", "ProductId"]
+            ].values.tolist()
+
             # Execute query with the values to update
             cursor.executemany(update_query, update_values)
-        
-        if len(new_products_df)>0:
+
+        if len(new_products_df) > 0:
 
             insert_query = """INSERT INTO coffeeco.Inventory 
                         (ProductId, Name, Description, CountryOfOrigin, Price, StockQuantity) 
                         VALUES (?, ?, ?, ?, ?, ?)"""
 
-            # CREATE A LIST OF ROWS OF THE DATAFRAME 
+            # CREATE A LIST OF ROWS OF THE DATAFRAME
             insert_values = new_products_df.values.tolist()
 
-            # EXECUTE THE QUERY WITH THE LIST OF ROWS AS A PARAMETER   
+            # EXECUTE THE QUERY WITH THE LIST OF ROWS AS A PARAMETER
             # Add solution here:
-        
+
         st.toast("Added data to database!")
 
 
-
 def get_stock() -> pd.DataFrame:
-    '''
+    """
     Retrieve the stock table in the dataframe
-    '''
+    """
 
     # Define connection parameters and credentials
     server = "iris"
@@ -110,25 +119,21 @@ def get_stock() -> pd.DataFrame:
 
     # Create a connection string with the credentials
     db_url = f"iris://{username}:{password}@{server}:{port}/{namespace}"
-    
 
     # Create SQLAlchemy Engine
     engine = create_engine(db_url)
 
-
     # SQL selection query to return all the stock
-    sql =  """SELECT * FROM coffeeco.Inventory"""
+    sql = """SELECT * FROM coffeeco.Inventory"""
 
-    # Query DB with SQLAlchemy engine and Pandas to return a DataFrame 
+    # Query DB with SQLAlchemy engine and Pandas to return a DataFrame
     df = pd.read_sql(sql, engine)
 
     # Return the dataframe
     return df
 
+
 # **********************************************************************************
-
-
-
 
 
 # --------------------------- Main Page Creation -----------------------------------
@@ -154,21 +159,21 @@ else:
     # Displays current stock data
     st.dataframe(df)
 
-
-    # Loading new stock 
+    # Loading new stock
     st.header("Load Stock CSV")
     st.write("Use the button below to load the stock CSV chart")
 
-
-    ### Example using file upload (not possible in sandbox environment) 
+    ### Example using file upload (not possible in sandbox environment)
 
     # uploaded_csv = st.file_uploader("Load CSV", type="csv", key=f"uploader_{st.session_state.uploader_key}")
-    # # Activated upon file upload: 
-    # if uploaded_csv is not None: 
+    # # Activated upon file upload:
+    # if uploaded_csv is not None:
     #     #Read the csv file
     #     df = pd.read_csv(uploaded_csv)
 
-    csv_text = st.text_area("Paste CSV here", key=f"uploader_{st.session_state.uploader_key}")
+    csv_text = st.text_area(
+        "Paste CSV here", key=f"uploader_{st.session_state.uploader_key}"
+    )
     if csv_text:
         df = pd.read_csv(io.StringIO(csv_text))
 
@@ -185,6 +190,4 @@ else:
             df = None
 
             # Refresh the page to see changes
-            st.rerun() 
-    
-
+            st.rerun()
