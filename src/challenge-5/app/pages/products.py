@@ -29,9 +29,9 @@ def write_product_tile(i, id, item):
             st.header(item.get("Name"))
 
             ## Write other product properties
-            st.subheader(f"Origin: {item.get("CountryOfOrigin")}")
+            st.subheader(f"Origin: {item.get('CountryOfOrigin')}")
             st.write(item.get("Description"))
-            st.subheader(f"$ {item.get("Price")}")
+            st.subheader(f"$ {item.get('Price')}")
 
             ## Set a trackable state for the max quantity
             ## so it can be dynamically updated with the basket
