@@ -5,17 +5,30 @@ import iris
 
 st.title("Checkout")
 
-
 def update_database(id: int, irispy: iris.IRIS):
     # Open Product Object by ID
     item = irispy.classMethodObject("CoffeeCo.Inventory", "%OpenId", id)
 
     # Check if all stock is being bought
     if st.session_state.basket[id]["Quantity"] == item.get("StockQuantity"):
-        pass
+                
+        # Send internal alert from the server using pre-written method
+        ## ADD ALERT CALL HERE:
+                
+        # Delete the item from the database
+        irispy.classMethodVoid("CoffeeCo.Inventory", "%DeleteId", id)
+            
+    else: # The item is not sold out
+                
+        # Calculate the new quantity in stock
+        new_quantity = item.get("StockQuantity") - st.session_state.basket[id]["Quantity"]
+                
+        # Update the quantity in stock
+        item.set("StockQuantity", new_quantity) 
+                
+        # Save the item
+        item.invokeVoid("%Save")
 
-    else:  # The item is not sold out
-        pass
 
 
 # Create page saying basket is empty
