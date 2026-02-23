@@ -14,11 +14,11 @@ connection  = iris.connect(server, port, namespace, username, password)
 cursor = connection.cursor() 
 
 ## Drop table if it exists 
-cursor.execute("DROP TABLE IF EXISTS coffeeco.Inventory")
+cursor.execute("DROP TABLE IF EXISTS CoffeeCo.Inventory")
 
 
 ## SQL query to create a table 
-create_table_query  = """CREATE TABLE coffeeco.Inventory ( 
+create_table_query  = """CREATE TABLE CoffeeCo.Inventory ( 
     ProductId Integer NOT NULL UNIQUE PRIMARY KEY,
     Name VARCHAR(50), 
     Price DOUBLE, 
@@ -34,7 +34,7 @@ cursor.execute("SET OPTION PKEY_IS_IDKEY = TRUE")
 cursor.execute(create_table_query)
 
 ## Insert query
-insert_query = """INSERT INTO coffeeco.Inventory 
+insert_query = """INSERT INTO CoffeeCo.Inventory 
                 (ProductId, Name, Price, StockQuantity, CountryOfOrigin, Description)
                 VALUES (?, ?, ?, ?, ?, ? )""" ## ? Is a placeholder for a value passed at runtime
 

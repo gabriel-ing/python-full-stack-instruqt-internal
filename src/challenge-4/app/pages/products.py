@@ -108,7 +108,7 @@ conn = iris.connect("iris", 1972, "USER", "SuperUser", "SYS")
 cursor = conn.cursor()
 
 ## Fetch IDs in our dataset
-cursor.execute("SELECT ProductId from coffeeco.Inventory")
+cursor.execute("SELECT ProductId from CoffeeCo.Inventory")
 ids = cursor.fetchall()
 ids = [x[0] for x in ids]
 cursor.close()
@@ -124,7 +124,7 @@ i = 1
 for id in ids:
     try:
         ## Open the object by ID
-        item = irispy.classMethodObject("coffeeco.Inventory", "%OpenId", id)
+        item = irispy.classMethodObject("CoffeeCo.Inventory", "%OpenId", id)
         ## Write the column for the product number, ID and Object
         write_product_tile(i, id, item)
         i += 1

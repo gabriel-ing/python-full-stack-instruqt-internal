@@ -55,7 +55,7 @@ def get_stock() -> pd.DataFrame:
 
     # SQL selection query to return all the stock
     ## !!!!CORRECT THIS LINE!!!
-    # Write a SQL query to retrieve all values from the coffeeco.Inventory table
+    # Write a SQL query to retrieve all values from the CoffeeCo.Inventory table
     sql = ""
 
     # Query DB with SQLAlchemy engine and Pandas to return a DataFrame
