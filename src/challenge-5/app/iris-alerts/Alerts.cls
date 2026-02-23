@@ -1,27 +1,31 @@
 Class CoffeeCo.Alerts Extends %Persistent
 {
-    Property AlertId As %Integer;
-    Property ProductId As %Integer;
-    Property AlertType As %String;
-    Property CreatedAt As %TimeStamp;
 
-    /// Save an alert to database
-    ClassMethod SaveAlert(pProductId, pAlertType) As %Status
-    {
+Property AlertId As %Integer;
+
+Property ProductId As %Integer;
+
+Property AlertType As %String;
+
+Property CreatedAt As %TimeStamp;
+
+/// Save an alert to database
+ClassMethod SaveAlert(pProductId As %Integer, pAlertType As %String) As %Status
+{
         Set sc = $$$OK
         
         set alert = ##class(CoffeeCo.Alerts).%New()
         set alert.ProductId = pProductId
         set alert.AlertType = pAlertType
-        set alert.CreatedAt = $ZTIMESTAMP($HOROLOG,3)
+        set alert.CreatedAt = $ZDATETIME($HOROLOG, 3)
         set sc = alert.%Save()
 
-        Return sc
-    }
+        quit sc
+}
 
-    /// Send Out Of Stock Alert
-    ClassMethod SendOutOfStockAlert(pProductId) As %String [language = "Python"]
-    {
+/// Send Out Of Stock Alert
+ClassMethod SendOutOfStockAlert(pProductId As %Integer, pName As %String) As %String [ Language = python ]
+{
         from email.mime.text import MIMEText
         import smtplib
         import iris
@@ -35,8 +39,9 @@ Class CoffeeCo.Alerts Extends %Persistent
         ## with smtplib.SMTP('localhost') as server:
             ## server.send_message(msg)
 
-        iris.SaveAlert(pProductId, "OutOfStock")
+        iris.CoffeeCo.Alerts.SaveAlert(pProductId, "OutOfStock")
 
-        return f"Out of stock alert sent for {pProductId}"
-    }
+        return f"Out of stock alert sent for ProductID: {pProductId}, ProductName: {pName}"
+}
+
 }
