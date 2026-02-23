@@ -40,8 +40,9 @@ ClassMethod SendOutOfStockAlert(pProductId As %Integer, pName As %String) As %St
             ## server.send_message(msg)
 
         iris.CoffeeCo.Alerts.SaveAlert(pProductId, "OutOfStock")
-
-        return f"Out of stock alert sent for ProductID: {pProductId}, ProductName: {pName}"
+        line = 40*"="
+        response = line + "\n" + f"Out of stock alert sent for ProductID: {pProductId}, ProductName: {pName}" + "\n" + line
+        return response
 }
 
 }

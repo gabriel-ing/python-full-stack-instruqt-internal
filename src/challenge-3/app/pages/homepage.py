@@ -39,7 +39,7 @@ with st.container(border=True):
     with col2:
         st.page_link(
             "pages/products.py",
-            label="Visit Our Online Store",
+            label="Visit Store",
             use_container_width=True,
         )
 

@@ -6,9 +6,9 @@ import iris
 st.title("Checkout")
 
 
-def update_database(id: int):
+def update_database(id: int, irispy: iris.IRIS):
     # Open Product Object by ID
-    item = irispy.classMethodObject("coffeeco.Inventory", "%OpenId", id)
+    item = irispy.classMethodObject("CoffeeCo.Inventory", "%OpenId", id)
 
     # Check if all stock is being bought
     if st.session_state.basket[id]["Quantity"] == item.get("StockQuantity"):
@@ -25,7 +25,6 @@ if "basket" not in st.session_state or st.session_state.basket == {}:
 
 # If basket is not empty, create checkout page
 else:
-    print(st.session_state.basket)
 
     # Create a Pandas Dataframe from the basket dictionary
     basket = (
@@ -86,7 +85,7 @@ else:
             for id in st.session_state.basket:
                 pass
                 # # Call the function to update the database
-                # update_database(id)
+                # update_database(id, irispy)
 
             # # Reset basket
             # st.session_state.basket = {}
