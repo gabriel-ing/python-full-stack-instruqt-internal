@@ -12,7 +12,6 @@ def main():
                             st.Page("pages/stock_management.py", title="Manage databases"),
                             st.Page("pages/hidden/error.py", title="Error"),
                             st.Page("pages/hidden/thanks.py", title="thanks"),
-                            #st.Page("pages/hidden/playground.py", title="Test-playground")
                             
                             ]    
 
@@ -29,7 +28,6 @@ def main():
     st.sidebar.header("Administration")
     st.sidebar.page_link("pages/stock_management.py", label="Manage Stock")
     
-    #st.sidebar.page_link("pages/hidden/playground.py", label="dev")
 
 
 if __name__ == "__main__":

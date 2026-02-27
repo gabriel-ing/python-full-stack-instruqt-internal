@@ -65,7 +65,7 @@ def add_to_database(df: pd.DataFrame):
         cursor = conn.cursor()
 
         # Get list of current product ids in the database
-        cursor.execute("SELECT ProductId FROM coffeeco.Inventory")
+        cursor.execute("SELECT ProductId FROM CoffeeCo.Inventory")
         current_ids = [x[0] for x in cursor.fetchall()]
         print(current_ids)
 
@@ -76,7 +76,7 @@ def add_to_database(df: pd.DataFrame):
         if len(existing_products_df) > 0:
             ## SQL query to update the stock in a row
             update_query = """
-                    UPDATE coffeeco.Inventory
+                    UPDATE CoffeeCo.Inventory
                     SET StockQuantity = StockQuantity + ? 
                     WHERE ProductId = ?
                     """
@@ -90,7 +90,7 @@ def add_to_database(df: pd.DataFrame):
 
         if len(new_products_df) > 0:
 
-            insert_query = """INSERT INTO coffeeco.Inventory 
+            insert_query = """INSERT INTO CoffeeCo.Inventory 
                         (ProductId, Name, Description, CountryOfOrigin, Price, StockQuantity) 
                         VALUES (?, ?, ?, ?, ?, ?)"""
 
@@ -124,7 +124,7 @@ def get_stock() -> pd.DataFrame:
     engine = create_engine(db_url)
 
     # SQL selection query to return all the stock
-    sql = """SELECT * FROM coffeeco.Inventory"""
+    sql = """SELECT * FROM CoffeeCo.Inventory"""
 
     # Query DB with SQLAlchemy engine and Pandas to return a DataFrame
     df = pd.read_sql(sql, engine)
