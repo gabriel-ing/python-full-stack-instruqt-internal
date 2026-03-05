@@ -14,8 +14,8 @@ def update_database(id: int, irispy: iris.IRIS):
                 
         # Send internal alert from the server using pre-written method
         ## ADD ALERT CALL HERE:
-        response = irispy.classMethodString("CoffeeCo.Alerts", "SendOutOfStockAlert", id, item.get("Name"))
-        print(response)        
+
+
         # Delete the item from the database
         irispy.classMethodVoid("CoffeeCo.Inventory", "%DeleteId", id)
             
