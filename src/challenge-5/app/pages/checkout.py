@@ -100,7 +100,7 @@ else:
     # Create the button with an on-click function
     if st.button("Pay Now!"):
 
-        with iris.dbapi.connect(**connection_args) as connection:
+        with iris.connect(**connection_args) as connection:
             irispy = iris.createIRIS(connection)
 
             # Iterate over products in basket

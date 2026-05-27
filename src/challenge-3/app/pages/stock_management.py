@@ -70,7 +70,7 @@ def add_to_database(df: pd.DataFrame):
         st.warning("Data Not added")
         return -1
 
-    with iris.dbapi.connect(**connection_args) as conn:
+    with iris.connect(**connection_args) as conn:
         cursor = conn.cursor()
 
         # Get list of current product ids in the database
@@ -86,7 +86,7 @@ def add_to_database(df: pd.DataFrame):
             ## SQL query to update the stock in a row
             update_query = """
                     UPDATE CoffeeCo.Inventory
-                    SET StockQuantity = StockQuantity + ? 
+                    SET StockQuantity = StockQuantity + ?
                     WHERE ProductId = ?
                     """
             # Convert the dataframe to a list of lists
@@ -99,8 +99,8 @@ def add_to_database(df: pd.DataFrame):
 
         if len(new_products_df) > 0:
 
-            insert_query = """INSERT INTO CoffeeCo.Inventory 
-                        (ProductId, Name, Description, CountryOfOrigin, Price, StockQuantity) 
+            insert_query = """INSERT INTO CoffeeCo.Inventory
+                        (ProductId, Name, Description, CountryOfOrigin, Price, StockQuantity)
                         VALUES (?, ?, ?, ?, ?, ?)"""
 
             # CREATE A LIST OF ROWS OF THE DATAFRAME
@@ -109,6 +109,7 @@ def add_to_database(df: pd.DataFrame):
             # EXECUTE THE QUERY WITH THE LIST OF ROWS AS A PARAMETER
             # Add solution here:
 
+        cursor.close()
         st.toast("Added data to database!")
 
 

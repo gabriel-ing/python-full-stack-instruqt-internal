@@ -114,16 +114,15 @@ border: 2px solid #00B2A9; /* Steel blue border */
 ## ****************************** IRIS Connection *****************
 ## IRIS connection
 
-with iris.dbapi.connect(**connection_args) as conn:
+with iris.connect(**connection_args) as conn:
     cursor = conn.cursor()
 
     ## Fetch IDs in our dataset
     cursor.execute("SELECT ProductId from CoffeeCo.Inventory")
     ids = cursor.fetchall()
     ids = [x[0] for x in ids]
+    cursor.close()
 
-
-with iris.connect(**connection_args) as conn:
     ## Create IRIS native connection
     irispy = iris.createIRIS(conn)
 

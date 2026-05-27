@@ -61,10 +61,10 @@ def add_to_database(df:pd.DataFrame):
         st.warning("Data Not added")
         return -1
     
-    with iris.dbapi.connect(**connection_args) as conn:
+    with iris.connect(**connection_args) as conn:
         cursor = conn.cursor()
 
-        # Get list of current product ids in the database 
+        # Get list of current product ids in the database
         cursor.execute("SELECT ProductId FROM CoffeeCo.Inventory")
         current_ids = [x[0] for x in cursor.fetchall()]
         print(current_ids)
@@ -77,23 +77,24 @@ def add_to_database(df:pd.DataFrame):
 
             update_query = """
                     UPDATE CoffeeCo.Inventory
-                    SET StockQuantity = StockQuantity + ? 
+                    SET StockQuantity = StockQuantity + ?
                     WHERE ProductId = ?
                     """
             update_values = existing_products_df[["StockQuantity", "ProductId"]].values.tolist()
             cursor.executemany(update_query, update_values)
-        
-        if len(new_products_df)>0:
 
-            insert_query = """INSERT INTO CoffeeCo.Inventory 
-                        (ProductId, Name, Description, CountryOfOrigin, Price, StockQuantity) 
+        if len(new_products_df) > 0:
+
+            insert_query = """INSERT INTO CoffeeCo.Inventory
+                        (ProductId, Name, Description, CountryOfOrigin, Price, StockQuantity)
                         VALUES (?, ?, ?, ?, ?, ?)"""
 
 
             ## DELETE THESE TWO ROWS FOR CHALLENGE 03
-            insert_list = new_products_df.values.tolist() 
+            insert_list = new_products_df.values.tolist()
             cursor.executemany(insert_query, insert_list)
-        
+
+        cursor.close()
         st.toast("Added data to database!")
 
 
