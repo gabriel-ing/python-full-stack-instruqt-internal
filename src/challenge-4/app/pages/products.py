@@ -1,6 +1,13 @@
 import iris
 import streamlit as st
 
+connection_args = {
+    "hostname": "iris",
+    "port": 1972,
+    "namespace": "USER",
+    "username": "SuperUser",
+    "password": "SYS"
+}
 
 st.page_link("pages/checkout.py", label="Checkout", width="stretch")
 
@@ -104,30 +111,31 @@ border: 2px solid #00B2A9; /* Steel blue border */
 ## ****************************** IRIS Connection *****************
 
 ## IRIS connection
-conn = iris.connect("iris", 1972, "USER", "SuperUser", "SYS")
-cursor = conn.cursor()
+with iris.dbapi.connect(**connection_args) as conn:
+    cursor = conn.cursor()
 
-## Fetch IDs in our dataset
-cursor.execute("SELECT ProductId from CoffeeCo.Inventory")
-ids = cursor.fetchall()
-ids = [x[0] for x in ids]
-cursor.close()
+    ## Fetch IDs in our dataset
+    cursor.execute("SELECT ProductId from CoffeeCo.Inventory")
+    ids = cursor.fetchall()
+    ids = [x[0] for x in ids]
 
-## Create IRIS native connection
-irispy = iris.createIRIS(conn)
 
-## Creates Columns
-cols = st.columns(3, gap="small", border=False)
+with iris.connect(**connection_args) as conn:
+    ## Create IRIS native connection
+    irispy = iris.createIRIS(conn)
 
-i = 1
-## Iterate over product IDs
-for id in ids:
-    try:
-        ## Open the object by ID
-        item = irispy.classMethodObject("CoffeeCo.Inventory", "%OpenId", id)
-        ## Write the column for the product number, ID and Object
-        write_product_tile(i, id, item)
-        i += 1
-    except Exception as e:
-        print(e)
-        break
+    ## Creates Columns
+    cols = st.columns(3, gap="small", border=False)
+
+    i = 1
+    ## Iterate over product IDs
+    for id in ids:
+        try:
+            ## Open the object by ID
+            item = irispy.classMethodObject("CoffeeCo.Inventory", "%OpenId", id)
+            ## Write the column for the product number, ID and Object
+            write_product_tile(i, id, item)
+            i += 1
+        except Exception as e:
+            print(e)
+            break

@@ -61,6 +61,8 @@ def get_stock() -> pd.DataFrame:
     # Query DB with SQLAlchemy engine and Pandas to return a DataFrame
     df = pd.read_sql(sql, engine)
 
+    engine.dispose()  # Dispose of the engine to close the connection
+    
     # Return the dataframe
     return df
 

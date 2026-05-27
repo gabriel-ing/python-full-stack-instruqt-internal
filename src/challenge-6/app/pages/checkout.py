@@ -91,7 +91,15 @@ else:
     # Create the button with an on-click function
     if st.button("Pay Now!"):
 
-        with iris.connect("iris", 1972, "USER", "SuperUser", "SYS") as connection:
+        connection_args = {
+            "hostname": "iris",
+            "port": 1972,
+            "namespace": "USER",
+            "username": "SuperUser",
+            "password": "SYS"
+        }
+
+        with iris.connect(**connection_args) as connection:
             irispy = iris.createIRIS(connection)
 
             # Iterate over products in basket

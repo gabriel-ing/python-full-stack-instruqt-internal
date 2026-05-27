@@ -4,6 +4,14 @@ from sqlalchemy import create_engine, text
 import iris
 import io
 
+connection_args = {
+    "hostname": "iris",
+    "port": 1972,
+    "namespace": "USER",
+    "username": "SuperUser",
+    "password": "SYS"
+}
+
 # Define admin credentials
 # !! WARNING !!
 # Never hardcode credentials in production environments.
@@ -61,7 +69,7 @@ def add_to_database(df: pd.DataFrame):
         st.warning("Data Not added")
         return -1
 
-    with iris.connect("iris", 1972, "USER", "SuperUser", "SYS") as conn:
+    with iris.dbapi.connect(**connection_args) as conn:
         cursor = conn.cursor()
 
         # Get list of current product ids in the database
@@ -123,6 +131,8 @@ def get_stock() -> pd.DataFrame:
 
     # Query DB with SQLAlchemy engine and Pandas to return a DataFrame
     df = pd.read_sql(sql, engine)
+
+    engine.dispose()  # Dispose of the engine to close the connection
 
     # Return the dataframe
     return df
