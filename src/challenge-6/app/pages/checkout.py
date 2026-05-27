@@ -14,7 +14,10 @@ def update_database(id: int, irispy: iris.IRIS):
                 
         # Send internal alert from the server using pre-written method
         ## ADD ALERT CALL HERE:
-                
+        response = irispy.classMethodString("CoffeeCo.Alerts", "SendOutOfStockAlert", id, item.get("Name"))
+
+        print(response) # prints response from method call in terminal
+
         # Delete the item from the database
         irispy.classMethodVoid("CoffeeCo.Inventory", "%DeleteId", id)
             
@@ -104,12 +107,11 @@ else:
 
             # Iterate over products in basket
             for id in st.session_state.basket:
-                pass
-                # # Call the function to update the database
-                # update_database(id, irispy)
+                # Call the function to update the database
+                update_database(id, irispy)
 
             # # Reset basket
-            # st.session_state.basket = {}
+            st.session_state.basket = {}
 
             # # Redirect user to confirmation page
-            # st.switch_page( "pages/hidden/thanks.py")
+            st.switch_page( "pages/hidden/thanks.py")
