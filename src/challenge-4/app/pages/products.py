@@ -32,16 +32,29 @@ def write_product_tile(i, id, item):
 
         with st.container(height=550):
 
-            ##
-            ##
-            ##   COPY SOLUTION HERE!
-            ##
-            ##
+            
+            ## Retrieve the product details
+            name = item.get("Name")
+
+            ##        !!!!
+            ## EDIT THE LINES BELOW
+            ##        !!!!
+            origin = ""
+            description = ""
+            price = None
+            stock_quantity = None
+
+
+            # Write the products details to the tiles
+            st.header(name)
+            st.subheader(f"Origin: {origin}")
+            st.write(description)
+            st.subheader(f"$ {price}")
 
             ## Set a trackable state for the max quantity
             ## so it can be dynamically updated with the basket
             if f"max_qty{id}" not in st.session_state:
-                st.session_state[f"max_qty{id}"] = item.get("StockQuantity")
+                st.session_state[f"max_qty{id}"] = stock_quantity
 
             ## Create an input for the quantity to add to basket
             quantity = st.number_input(
@@ -55,9 +68,8 @@ def write_product_tile(i, id, item):
             st.button(
                 "Add To Basket",
                 key=id,
-                on_click=lambda: add_to_basket(
-                    id, item.get("Name"), item.get("Price"), quantity
-                ),
+                on_click=add_to_basket,
+                args=(id, name, price, quantity),
             )
 
 
