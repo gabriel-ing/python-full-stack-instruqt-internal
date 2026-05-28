@@ -31,19 +31,26 @@ def write_product_tile(i, id, item):
         st.html(f'<div class="{container_class}">')
 
         with st.container(height=550):
+            # Get product details
+            name = item.get("Name")
+            origin = item.get("CountryOfOrigin")
+            description = item.get("Description")
+            price = item.get("Price")
+            stock_quantity = item.get("StockQuantity")
+
 
             ## Retrieve product name
-            st.header(item.get("Name"))
+            st.header(name)
 
             ## Write other product properties
-            st.subheader(f"Origin: {item.get('CountryOfOrigin')}")
-            st.write(item.get("Description"))
-            st.subheader(f"$ {item.get('Price')}")
+            st.subheader(f"Origin: {origin}")
+            st.write(description)
+            st.subheader(f"$ {price}")
 
             ## Set a trackable state for the max quantity
             ## so it can be dynamically updated with the basket
             if f"max_qty{id}" not in st.session_state:
-                st.session_state[f"max_qty{id}"] = item.get("StockQuantity")
+                st.session_state[f"max_qty{id}"] = stock_quantity
 
             ## Create an input for the quantity to add to basket
             quantity = st.number_input(
@@ -57,9 +64,8 @@ def write_product_tile(i, id, item):
             st.button(
                 "Add To Basket",
                 key=id,
-                on_click=lambda: add_to_basket(
-                    id, item.get("Name"), item.get("Price"), quantity
-                ),
+                on_click=add_to_basket,
+                args=(id, name, price, quantity),
             )
 
 

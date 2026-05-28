@@ -116,10 +116,8 @@ def get_stock() -> pd.DataFrame:
     # Create a connection string with the credentials
     db_url = f"iris://{username}:{password}@{server}:{port}/{namespace}"
     
-
     # Create SQLAlchemy Engine
     engine = create_engine(db_url)
-
 
     # SQL selection query to return all the stock
     sql =  """SELECT * FROM CoffeeCo.Inventory"""
@@ -161,11 +159,9 @@ else:
     # Displays current stock data
     st.dataframe(df)
 
-
     # Loading new stock 
     st.header("Load Stock CSV")
     st.write("Use the button below to load the stock CSV chart")
-
 
     ### Example using file upload (not possible in sandbox environment) 
 
